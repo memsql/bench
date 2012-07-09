@@ -16,16 +16,22 @@
 import pymongo
 
 from base_database import BaseDatabase
-from config import MONGO_FLAGS
+from config import MONGO_FLAGS, MONGO_USER, MONGO_PWD, MONGO_DROP_DATABASE
 
 class MongoDatabase(BaseDatabase):
     '''An implementation of BaseDatabase using pymongo.'''
     def __init__(self):
         self.connection = pymongo.Connection(**MONGO_FLAGS)
         self.db = self.connection.game
+        if MONGO_USER != '': 
+            try:
+                self.db.authenticate(MONGO_USER,MONGO_PWD)
+            except Exception, e:
+                print e
 
     def setup(self):
-        self.connection.drop_database('game')
+        if MONGO_DROP_DATABASE:
+            self.connection.drop_database('game')
         self.db.players.ensure_index([('id', pymongo.ASCENDING)])
         self.db.games.ensure_index([('players', pymongo.ASCENDING)])
         self.db.events.ensure_index([('user_id', pymongo.ASCENDING)])

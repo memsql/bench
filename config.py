@@ -23,7 +23,11 @@ NUM_PLAYERS = NUM_WORKERS * PLAYERS_PER_WORKER
 # _mysql.connect; MONGO_FLAGS is used for pymongo.Connection.
 MEMSQL_FLAGS = {'host': '127.0.0.1', 'port': 3306, 'user': 'root'} 
 MYSQL_FLAGS = {'host': '127.0.0.1', 'port': 3307, 'user': 'root'}
-MONGO_FLAGS = {}
+
+MONGO_FLAGS = {'host': '127.0.0.1', 'port': 27017}
+MONGO_USER = ''
+MONGO_PWD = ''
+MONGO_DROP_DATABASE = False
 
 # The database class to use for the benchmark. Options are 'MemSqlDatabase',
 # 'MySqlDatabase' and 'MongoDatabase'.
