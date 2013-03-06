@@ -28,6 +28,7 @@ MONGO_FLAGS = {'host': '127.0.0.1', 'port': 27017}
 MONGO_USER = ''
 MONGO_PWD = ''
 MONGO_DROP_DATABASE = False
+MONGO_SHARDED_DATABASE = False
 
 # The database class to use for the benchmark. Options are 'MemSqlDatabase',
 # 'MySqlDatabase' and 'MongoDatabase'.
