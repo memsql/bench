@@ -16,13 +16,14 @@
 import pymongo
 
 from base_database import BaseDatabase
-from config import MONGO_FLAGS, MONGO_USER, MONGO_PWD, MONGO_DROP_DATABASE
+from config import MONGO_FLAGS, MONGO_USER, MONGO_PWD, MONGO_DROP_DATABASE, MONGO_SHARDED_DATABASE
 
 class MongoDatabase(BaseDatabase):
     '''An implementation of BaseDatabase using pymongo.'''
     def __init__(self):
         self.connection = pymongo.Connection(**MONGO_FLAGS)
         self.db = self.connection.game
+        self.admin = self.connection.admin
         if MONGO_USER != '': 
             try:
                 self.db.authenticate(MONGO_USER,MONGO_PWD)
@@ -37,6 +38,11 @@ class MongoDatabase(BaseDatabase):
         self.db.events.ensure_index([('user_id', pymongo.ASCENDING)])
         self.db.game_lengths.ensure_index([('length', pymongo.ASCENDING)])
 
+        if MONGO_SHARDED_DATABASE:
+            self.admin.command({'enableSharding': 'game' })
+            self.admin.command({'shardCollection': 'game.events', 'key': {'user_id':1}})
+            self.admin.command({'shardCollection': 'game.players', 'key': {'id':1}})
+	
     def get_stats(self):
         return {
             'game_length_distr': list(self.db.game_lengths.find().sort('num', -1)),
