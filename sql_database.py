@@ -45,6 +45,7 @@ class SqlDatabase(BaseDatabase):
 
     def setup(self):
         self.db.execute('DROP DATABASE IF EXISTS game')
+        self.db.execute('/*!90618 set global default_partitions_per_leaf=1*/')
         self.db.execute('CREATE DATABASE game')
         self.db.execute('USE game')
         self.db.execute('CREATE TABLE games (id BIGINT AUTO_INCREMENT, turn INT NOT NULL, player1 INT NOT NULL, player2 INT NOT NULL, INDEX (player1), INDEX (player2), PRIMARY KEY (id))')
